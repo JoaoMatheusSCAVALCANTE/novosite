@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http.response import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate 
-from django.contrib.auth import login as login_django
-
+from django.contrib.auth import login as login_django, logout as logout_django
+from .models import Nota
 
 def login(request):
     if request.method == "GET":
@@ -16,9 +16,10 @@ def login(request):
         
         if user:
             login_django(request, user)
-            return HttpResponse('Autenticado!')
+            return render(request, 'usuarios/home.html')
         else:
             return HttpResponse('ERROU SEU ANIMAL')
+        
 
 def cadastro(request):
     if request.method == "GET":
@@ -36,7 +37,7 @@ def cadastro(request):
             user = User.objects.create_user(username=username,email=email,password=password,first_name=first_name)
             user.save()
 
-            return HttpResponse("Usuário cadastrado com sucesso!")
+            return render(request, 'usuarios/login.html')
 
 def home(request):
     if request.user.is_authenticated:
@@ -57,7 +58,27 @@ def alterar(request):
         return HttpResponse("Faça o login para acessar!")
 
 def visualizar(request):
-    if request.user.is_authenticated:
-        return render(request, 'usuarios/visualizar.html')
+    if request.method == "GET":
+        if request.user.is_authenticated:
+            lista_notas = Nota.objects.all()
+            dicionario_notas = {'lista_nota':lista_notas}
+            return render(request, 'usuarios/visualizar.html', dicionario_notas)
+        else:
+            return HttpResponse("Faça o login para acessar!")
     else:
-        return HttpResponse("Faça o login para acessar!")
+        disciplina = request.POST.GET('disciplina')
+        if disciplina == "Todas as disciplinas":
+            lista_nota = Nota.objects.all()
+            dicionario_notas = {'lista_nota':lista_notas}
+            return render(request, 'usuarios/visualizar.html', dicionario_notas)
+        else:
+            lista_notas = Nota.objects.filter(disciplina=disciplina)
+            dicionario_notas_filtradas = {"lista_notas": lista_notas}
+            return render(request, 'usuarios/visualizar.html', dicionario_notas_filtradas)
+
+def logout(request):
+    if request.user.is_authenticated:
+        logout_django(request)
+        return render(request, 'usuarios/login.html')
+    else:
+        return HttpResponse("Você não acessou sua conta ainda!")        
