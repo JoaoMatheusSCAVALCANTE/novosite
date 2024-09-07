@@ -1,0 +1,13 @@
+{% extends 'usuarios/base.html' %}
+{% block aba %}Excluir Notas{% endblock %}
+{% block titulo %}Excluir Notas{% endblock %}
+
+{% block conteudo %} 
+<h3>Exclusão da Nota Selecionada</h3>
+<hr>
+<p>Tem certeza que deseja excluir as notas da disciplina <strong>{{ lista_notas.disciplina }}</strong></p>
+<div class="delete">
+    <a href="{% url 'excluir' lsita_notas.pk %}" class = "btn btn-sucess btn-sm">SIM!</a>
+    <a href="{% url 'alterar' %}" class="btn btn-danger btn-sm">NÃO!!!</a>
+</div>
+{% endblock %}

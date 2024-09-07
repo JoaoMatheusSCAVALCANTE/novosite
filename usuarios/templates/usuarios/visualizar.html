@@ -21,4 +21,32 @@
 
 </form>
 
+<div class = "table-responsive">
+    <table class="table table-responsive">
+        <tr>
+            <th>Aluno</th>
+            <th>Disciplina</th>
+            <th>Nota das atividades</th>
+            <th>Nota do Trabalho</th>
+            <th>Nota da Prova</th>
+            <th>Média</th>
+        </tr>
+        {% for campo in lista_notas %}
+        <tr>
+            <td>{{ user.first_name }}</td>
+            <td>{{ campo.disciplina }}</td>
+            <td>{{ campo.nota_atividades }}</td>
+            <td>{{ campo.nota_trabalho }}</td>
+            <td>{{ campo.nota_prova }}</td>
+            <td>{{ campo.media }}</td>
+        </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">Nenhum registro encontrado.</td>
+            </tr>
+        {% endfor %}    
+    </table>
+</div>
+
+
 {% endblock %}
