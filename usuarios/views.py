@@ -19,7 +19,7 @@ def login(request):
             login_django(request, user)
             return render(request, 'usuarios/home.html')
         else:
-            return HttpResponse('ERROU SEU ANIMAL')
+            return HttpResponse('Erro, digite novamente')
         
 
 def cadastro(request):
@@ -56,10 +56,10 @@ def lancar(request):
         nota = Nota()
         nota.nome_aluno = request.user.first_name
         nota.disciplina = request.POST.get('disciplina')
-        nota.nota_atividade = request.POST.get('nota_atividade')
+        nota.nota_atividades = request.POST.get('nota_atividades')
         nota.nota_trabalho = request.POST.get('nota_trabalho')
         nota.nota_prova = request.POST.get('nota_prova')
-        nota.media = int(nota.nota_atividade) + int(nota.nota_trabalho) + int(nota.nota_prova)
+        nota.media = int(nota.nota_atividades) + int(nota.nota_trabalho) + int(nota.nota_prova)
 
         nota_verificada = Nota.objects.filter(disciplina=nota.disciplina).first()
 
@@ -88,7 +88,16 @@ def excluir_verificacao(request, pk):
             return render (request, 'usuarios/excluir.html', dicionario_notas)
         else:
             return HttpResponse("Faça o login para acessar!")   
-    
+
+def editar_verificacao(request, pk):
+    if request.method == "GET":
+        if request.user.is_authenticated:
+            lista_notas = Nota.objects.get(pk=pk)
+            dicionario_notas = {'lista_notas':lista_nota}
+            return render (request, 'usuarios/editar.html', dicionario_notas)
+        else:
+            return HttpResponse("Faça o login para acessar!") 
+
 def excluir(request, pk):
     if request.method == "GET":
         if request.user.is_authenticated:
@@ -97,21 +106,36 @@ def excluir(request, pk):
             return HttpResponseRedirect(reverse('alterar'))
         else:
             return HttpResponse("Faça o login para acessar!")    
-            
+
+def editar(request, pk):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            nome_aluno = request.user.first_name
+            disciplina = request.POST.get('disciplina')
+            nota_atividades = request.POST.get('nota_atividades')
+            nota_trabalho = request.POST.get('nota_trabalho')
+            nota_prova = request.POST.get(nota_prova)
+            media = int(nota_atividades) + int(nota_trabalho) + int(nota_prova)
+            Nota.objects.filter(pk=pk).update(nome_aluno = nome_aluno, disciplina = disciplina, nota_atividades = nota_atividades, nota_trabalho = nota_trabalho, nota_prova = nota_prova, media = media)
+            return HttpResponseRedirect(reverse('alterar'))
+        else:
+            return HttpResponse("Faça o login para acessar!")        
+
+
 
 def visualizar(request):
     if request.method == "GET":
         if request.user.is_authenticated:
             lista_notas = Nota.objects.all()
-            dicionario_notas = {'lista_nota':lista_notas}
+            dicionario_notas = {'lista_notaS':lista_notas}
             return render(request, 'usuarios/visualizar.html', dicionario_notas)
         else:
             return HttpResponse("Faça o login para acessar!")
     else:
-        disciplina = request.POST.GET('disciplina')
+        disciplina = request.POST.get('disciplina')
         if disciplina == "Todas as disciplinas":
-            lista_nota = Nota.objects.all()
-            dicionario_notas = {'lista_nota':lista_notas}
+            lista_notas = Nota.objects.all()
+            dicionario_notas = {'lista_notas':lista_notas}
             return render(request, 'usuarios/visualizar.html', dicionario_notas)
         else:
             lista_notas = Nota.objects.filter(disciplina=disciplina)
@@ -123,4 +147,5 @@ def logout(request):
         logout_django(request)
         return render(request, 'usuarios/login.html')
     else:
-        return HttpResponse("Você não acessou sua conta ainda!")        
+        return HttpResponse("Você não acessou sua conta ainda!")     
+
