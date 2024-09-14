@@ -9,14 +9,14 @@
     </head>
     <body>
         <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #008000;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3c3f3c;">
             <div class="container px-5">
-                <a class="navbar-brand" href="{% url 'home' %}">Diário de Notas</a>
+                <a class="navbar-brand" href="{% url 'home' %}">JG Alguéis de Carros</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'home' %}">Página inicial</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Sobre</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'sobre' %}">Sobre</a></li>
                         <li class="nav-item"><a class="nav-link" href="#!">Contato</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
                     </ul>
@@ -64,7 +64,7 @@
             </div>
         </div>
         <!-- Footer-->
-        <footer class="fixed-bottom" style = "background-color: #008000;">
+        <footer class="fixed-bottom" style = "background-color: #3c3f3c;">
             <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; Diário de notas 2024</p></div>
         </footer>
         <!-- Bootstrap core JS-->
